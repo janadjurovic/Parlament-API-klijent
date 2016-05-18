@@ -55,8 +55,14 @@ public class ParlamentAPIKomunikacija {
 
 		return null;
 	}
+	
+	public static JsonArray vratiPoslanikeUJsonFormatu() throws Exception {
+		Gson gson= new GsonBuilder().setPrettyPrinting().create();
+		JsonArray jArray = gson.fromJson(sendGet(URL), JsonArray.class);
+		return jArray;
+	}
 
-	private String sendGet(String url) throws IOException{
+	private static String sendGet(String url) throws IOException{
 		URL obj = new URL(url);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
@@ -81,5 +87,6 @@ public class ParlamentAPIKomunikacija {
 		return response.toString();
 		
 	}
+	
 	
 }

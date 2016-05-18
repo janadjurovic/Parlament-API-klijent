@@ -17,6 +17,11 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.table.DefaultTableModel;
 
+import gui.model.PoslanikTableModel;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class ParlamentGUI extends JFrame {
 
 	private JPanel contentPane;
@@ -29,21 +34,7 @@ public class ParlamentGUI extends JFrame {
 	private JScrollPane scrollPane_1;
 	private JTextArea textArea;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ParlamentGUI frame = new ParlamentGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	/**
 	 * Create the frame.
@@ -74,6 +65,11 @@ public class ParlamentGUI extends JFrame {
 	private JButton getBtnGET() {
 		if (btnGET == null) {
 			btnGET = new JButton("GET members");
+			btnGET.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GUIKontroler.getMembers();
+				}
+			});
 			btnGET.setPreferredSize(new Dimension(120, 23));
 		}
 		return btnGET;
@@ -81,6 +77,11 @@ public class ParlamentGUI extends JFrame {
 	private JButton getBtnFill() {
 		if (btnFill == null) {
 			btnFill = new JButton("Fill table");
+			btnFill.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GUIKontroler.fillTable();
+				}
+			});
 			btnFill.setPreferredSize(new Dimension(120, 23));
 		}
 		return btnFill;
@@ -99,16 +100,11 @@ public class ParlamentGUI extends JFrame {
 		}
 		return scrollPane;
 	}
-	private JTable getTable() {
+	public JTable getTable() {
 		if (table == null) {
 			table = new JTable();
-			table.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-					"ID", "Name", "Last name", "Birth date"
-				}
-			));
+			table.setModel(new PoslanikTableModel(null));
+			
 		}
 		return table;
 	}
@@ -120,7 +116,7 @@ public class ParlamentGUI extends JFrame {
 		}
 		return scrollPane_1;
 	}
-	private JTextArea getTextArea() {
+	public JTextArea getTextArea() {
 		if (textArea == null) {
 			textArea = new JTextArea();
 			textArea.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Status", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
