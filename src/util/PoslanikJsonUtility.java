@@ -43,12 +43,15 @@ public class PoslanikJsonUtility {
 		JsonArray jArray = new GsonBuilder().create().fromJson(in, JsonArray.class);
 
 		in.close();
+		
+		JsonObject jObj = null;
+		Poslanik p = null;
 
 		for (int i = 0; i < jArray.size(); i++) {
 
-			JsonObject jObj = (JsonObject) jArray.get(i);
+			jObj = (JsonObject) jArray.get(i);
 
-			Poslanik p = new Poslanik();
+			p = new Poslanik();
 
 			p.setId(jObj.get("id").getAsInt());
 			p.setIme(jObj.get("name").getAsString());

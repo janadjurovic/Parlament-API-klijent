@@ -69,7 +69,7 @@ public class PoslanikTableModel extends AbstractTableModel {
 		switch (columnIndex) {
 		case 1:
 			String ime = aValue.toString();
-			if(ime != null || ime.isEmpty()){
+			if(ime != null || !(ime.isEmpty())){
 				p.setIme(ime);
 			}
 			else {
@@ -79,7 +79,7 @@ public class PoslanikTableModel extends AbstractTableModel {
 			break;
 		case 2:
 			String prezime = aValue.toString();
-			if(prezime != null || prezime.isEmpty()){
+			if(prezime != null || !(prezime.isEmpty())){
 				p.setIme(prezime);
 			}
 			else {
@@ -116,7 +116,14 @@ public class PoslanikTableModel extends AbstractTableModel {
 	public Poslanik getByIndex(int index){
 		return poslanici.get(index);
 	}
+	public List<Poslanik> getPoslanici() {
+		return poslanici;
+	}
 	
+	public void osveziTabelu(List<Poslanik> poslanici){
+		this.poslanici = poslanici;
+		fireTableDataChanged();
+	}
 	
 	
 }

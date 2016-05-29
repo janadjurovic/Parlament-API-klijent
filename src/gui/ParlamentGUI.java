@@ -17,9 +17,12 @@ import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.table.DefaultTableModel;
 
+import domen.Poslanik;
 import gui.model.PoslanikTableModel;
 
 import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.util.LinkedList;
 import java.awt.event.ActionEvent;
 
 public class ParlamentGUI extends JFrame {
@@ -79,7 +82,12 @@ public class ParlamentGUI extends JFrame {
 			btnFill = new JButton("Fill table");
 			btnFill.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					GUIKontroler.fillTable();
+					try {
+						GUIKontroler.fillTable();
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
 			btnFill.setPreferredSize(new Dimension(120, 23));
@@ -89,6 +97,11 @@ public class ParlamentGUI extends JFrame {
 	private JButton getBtnUpdateMembers() {
 		if (btnUpdateMembers == null) {
 			btnUpdateMembers = new JButton("Update members");
+			btnUpdateMembers.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GUIKontroler.updateMembers();
+				}
+			});
 			btnUpdateMembers.setPreferredSize(new Dimension(135, 23));
 		}
 		return btnUpdateMembers;
@@ -122,5 +135,10 @@ public class ParlamentGUI extends JFrame {
 			textArea.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Status", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
 		}
 		return textArea;
+	}
+	
+	public void osveziTabelu(LinkedList<Poslanik> poslanici){
+		PoslanikTableModel model = (PoslanikTableModel)table.getModel();
+		model.osveziTabelu(poslanici);
 	}
 }

@@ -22,7 +22,7 @@ public class ParlamentAPIKomunikacija {
 	private static final String URL = "http://147.91.128.71:9090/parlament/api/members";
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
 	
-	public List<Poslanik> vratiPoslanike() throws ParseException{
+	public static List<Poslanik> vratiPoslanike() throws ParseException{
 		try {
 			String result = sendGet(URL);
 			
@@ -36,10 +36,10 @@ public class ParlamentAPIKomunikacija {
 				
 				Poslanik p = new Poslanik();
 				p.setId(jsonPoslanik.get("id").getAsInt());
-				p.setIme(jsonPoslanik.get("ime").getAsString());
-				p.setPrezime(jsonPoslanik.get("poslanik").getAsString());
-				if(jsonPoslanik.get("datumRodjenja") != null){
-					p.setDatumRodjenja(sdf.parse(jsonPoslanik.get("datumRodjenja").getAsString()));
+				p.setIme(jsonPoslanik.get("name").getAsString());
+				p.setPrezime(jsonPoslanik.get("lastName").getAsString());
+				if(jsonPoslanik.get("birthDate") != null){
+					p.setDatumRodjenja(sdf.parse(jsonPoslanik.get("birthDate").getAsString()));
 				}
 				
 				poslanici.add(p);
@@ -86,6 +86,57 @@ public class ParlamentAPIKomunikacija {
 
 		return response.toString();
 		
+	}
+	
+	public static JsonArray prebaciUJsonNiz(List<Poslanik> poslanici){
+		JsonArray jArray = new JsonArray();
+		
+		JsonObject jsonObject = null;
+		
+		for (int i = 0; i < poslanici.size(); i++) {
+			Poslanik p = poslanici.get(i);
+			
+			jsonObject = new JsonObject();
+			jsonObject.addProperty("id", p.getId());
+			jsonObject.addProperty("name", p.getIme());
+			jsonObject.addProperty("lastName", p.getPrezime());
+			try {
+				jsonObject.addProperty("birthDate", sdf.format(p.getDatumRodjenja()));
+			} catch (Exception e) {
+				jsonObject.addProperty("birthDate", "nepoznato");
+			}
+			
+			jArray.add(jsonObject);
+			
+		}
+		
+		return jArray;
+	
+		
+	}
+	
+	public static LinkedList<Poslanik> parseMembers(JsonArray poslanici) {
+		LinkedList<Poslanik> poslaniciLista = new LinkedList<Poslanik>();
+
+		for (int i = 0; i < poslanici.size(); i++) {
+			JsonObject poslanikJson = (JsonObject) poslanici.get(i);
+
+			Poslanik p = new Poslanik();
+			p.setId(poslanikJson.get("id").getAsInt());
+			p.setIme(poslanikJson.get("ime").getAsString());
+			p.setPrezime(poslanikJson.get("prezime").getAsString());
+			try {
+				p.setDatumRodjenja(sdf.parse(poslanikJson.get("datumRodjenja").getAsString()));
+			} catch (ParseException e) {
+				
+			}catch(NullPointerException e){
+				
+			}
+
+			poslaniciLista.add(p);
+		}
+
+		return poslaniciLista;
 	}
 	
 	
